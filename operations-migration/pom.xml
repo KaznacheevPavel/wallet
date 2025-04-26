@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.kaznacheev.wallet</groupId>
+        <artifactId>dependencies</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>operations-migration</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Operations migration</name>
+    <description>Liquibase migration for operations module</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFile>src/main/resources/db/liquibase-dev.properties</propertyFile>
+                    <changeLogFile>src/main/resources/db/changelog/changelog-master.xml</changeLogFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

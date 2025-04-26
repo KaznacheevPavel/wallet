@@ -10,6 +10,12 @@ services:
     ports:
       - "5433:5432"
 
+  operations-migration:
+    image: operations-migration:latest
+    build: ./operations-migration
+    depends_on:
+      - postgres-operations
+
   operations-service:
     image: operations-service:latest
     build: ./operations

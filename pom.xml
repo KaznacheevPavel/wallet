@@ -20,6 +20,7 @@
 	<modules>
 		<module>dependencies</module>
 		<module>operations</module>
+		<module>operations-migration</module>
 	</modules>
 
 </project>
