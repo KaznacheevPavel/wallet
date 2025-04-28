@@ -19,6 +19,7 @@
 
 	<modules>
 		<module>dependencies</module>
+		<module>common-lib</module>
 		<module>operations</module>
 		<module>operations-migration</module>
 	</modules>
