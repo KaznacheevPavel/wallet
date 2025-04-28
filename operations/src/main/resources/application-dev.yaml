@@ -4,3 +4,7 @@ spring:
     url: jdbc:postgresql://localhost:5433/operations_db
     username: admin
     password: admin
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
