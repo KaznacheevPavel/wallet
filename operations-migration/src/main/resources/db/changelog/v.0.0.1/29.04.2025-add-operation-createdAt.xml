@@ -4,11 +4,11 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="add-tag-v.0.0.1" author="Kaznacheev Pavel">
-        <tagDatabase tag="v.0.0.1"/>
+    <changeSet id="29.04.2025-add-operation-createdAt" author="Kaznacheev Pavel">
+        <sqlFile path="sql/add-operation-createdAt.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/rollback/drop-operation-createdAt.sql" relativeToChangelogFile="true"/>
+        </rollback>
     </changeSet>
-
-    <include file="26.04.2025-create-operation-table.xml" relativeToChangelogFile="true" author="Kaznacheev Pavel"/>
-    <include file="29.04.2025-add-operation-createdAt.xml" relativeToChangelogFile="true" author="Kaznacheev Pavel"/>
 
 </databaseChangeLog>

@@ -1,0 +1,2 @@
+ALTER TABLE operation
+    ADD COLUMN created_at TIMESTAMPTZ NOT NULL DEFAULT (now() AT TIME ZONE 'UTC');

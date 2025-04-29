@@ -5,6 +5,7 @@ import lombok.Getter;
 import ru.kaznacheev.wallet.operation.entity.OperationType;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 /**
  * Краткая информация об операции.
@@ -29,5 +30,10 @@ public class OperationShortResponse {
      * Сумма операции.
      */
     private BigDecimal amount;
+
+    /**
+     * Дата и время создания операции.
+     */
+    private OffsetDateTime createdAt;
 
 }

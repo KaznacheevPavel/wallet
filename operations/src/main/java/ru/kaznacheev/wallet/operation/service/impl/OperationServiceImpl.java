@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kaznacheev.wallet.common.dto.CursorPage;
+import ru.kaznacheev.wallet.common.dto.CursorPageable;
 import ru.kaznacheev.wallet.common.exception.ExceptionTitle;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
-import ru.kaznacheev.wallet.common.dto.CursorPageable;
 import ru.kaznacheev.wallet.operation.dto.response.OperationResponse;
 import ru.kaznacheev.wallet.operation.dto.response.OperationShortResponse;
 import ru.kaznacheev.wallet.operation.entity.Operation;
@@ -16,6 +16,8 @@ import ru.kaznacheev.wallet.operation.mapper.OperationMapper;
 import ru.kaznacheev.wallet.operation.repository.OperationRepository;
 import ru.kaznacheev.wallet.operation.service.OperationService;
 
+import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ public class OperationServiceImpl implements OperationService {
 
     private final OperationRepository operationRepository;
     private final OperationMapper operationMapper;
+    private final Clock clock;
 
     @Override
     public OperationResponse createOperation(CreateOperationRequest request) {
@@ -35,6 +38,7 @@ public class OperationServiceImpl implements OperationService {
                 .type(OperationType.valueOf(request.getType()))
                 .amount(request.getAmount())
                 .comment(request.getComment())
+                .createdAt(OffsetDateTime.now(clock))
                 .build();
         operationRepository.save(operation);
         return operationMapper.toOperationResponse(operation);

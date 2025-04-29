@@ -27,7 +27,8 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
             o.id,
             o.type,
             o.amount,
-            o.comment
+            o.comment,
+            o.createdAt
             )
         FROM Operation o
         WHERE o.id = :id
@@ -45,7 +46,8 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
         SELECT new ru.kaznacheev.wallet.operation.dto.response.OperationShortResponse(
             o.id,
             o.type,
-            o.amount
+            o.amount,
+            o.createdAt
             )
         FROM Operation o
         WHERE (:cursor IS NULL OR o.id < :cursor)

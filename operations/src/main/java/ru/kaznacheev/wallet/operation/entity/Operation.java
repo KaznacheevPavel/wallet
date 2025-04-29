@@ -17,6 +17,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 /**
  * Сущность операции.
@@ -57,5 +58,11 @@ public class Operation {
      * Комментарий к операции.
      */
     private String comment;
+
+    /**
+     * Дата и время создания операции.
+     */
+    @Column(name = "created_at")
+    private OffsetDateTime createdAt;
 
 }
