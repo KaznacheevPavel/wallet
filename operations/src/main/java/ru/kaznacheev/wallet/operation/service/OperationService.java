@@ -1,5 +1,7 @@
 package ru.kaznacheev.wallet.operation.service;
 
+import ru.kaznacheev.wallet.common.dto.CursorPage;
+import ru.kaznacheev.wallet.common.dto.CursorPageable;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
 import ru.kaznacheev.wallet.operation.dto.response.OperationResponse;
 import ru.kaznacheev.wallet.operation.dto.response.OperationShortResponse;
@@ -28,10 +30,11 @@ public interface OperationService {
     OperationResponse getOperationById(Long id);
 
     /**
-     * Возвращает краткую информацию о всех операциях.
+     * Возвращает краткую информацию об операциях.
      *
-     * @return {@link List} {@link OperationShortResponse} с краткой информацией об операции
+     * @param cursorPageable Параметры курсорной пагинации
+     * @return {@link CursorPage} {@link List} {@link OperationShortResponse} с краткой информацией об операции
      */
-    List<OperationShortResponse> getAllOperations();
+    CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(CursorPageable cursorPageable);
 
 }

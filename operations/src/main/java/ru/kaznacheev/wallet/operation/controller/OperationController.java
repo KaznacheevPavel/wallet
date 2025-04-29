@@ -2,11 +2,14 @@ package ru.kaznacheev.wallet.operation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.kaznacheev.wallet.common.dto.CursorPage;
+import ru.kaznacheev.wallet.common.dto.CursorPageable;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
 import ru.kaznacheev.wallet.operation.dto.response.OperationResponse;
 import ru.kaznacheev.wallet.operation.dto.response.OperationShortResponse;
@@ -47,13 +50,14 @@ class OperationController {
     }
 
     /**
-     * Обрабатывает запрос на получение краткой информации о всех операциях.
+     * Обрабатывает запрос на получение краткой информации об операциях.
      *
-     * @return {@link List} {@link OperationShortResponse} с краткой информацией об операции
+     * @param cursorPageable Параметры курсорной пагинации
+     * @return {@link CursorPage} {@link List} {@link OperationShortResponse} с краткой информацией об операции
      */
     @GetMapping
-    public List<OperationShortResponse> getAllOperations() {
-        return operationService.getAllOperations();
+    public CursorPage<List<OperationShortResponse>> getAllOperations(@ModelAttribute CursorPageable cursorPageable) {
+        return operationService.getAllOperationsByCursorPageable(cursorPageable);
     }
 
 }

@@ -34,14 +34,24 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
     """)
     Optional<OperationResponse> findOperationResponseById(Long id);
 
-    @Query("""
+    /**
+     * Возвращает краткую информацию об операциях с курсорной пагинацией.
+     *
+     * @param limit Количество возвращаемых операций
+     * @param cursor Идентификатор записи, с которой начинается выборка (не включительно)
+     * @return {@link List} {@link OperationShortResponse} с краткой информацией об операциях
+     */
+    @Query(value = """
         SELECT new ru.kaznacheev.wallet.operation.dto.response.OperationShortResponse(
             o.id,
             o.type,
             o.amount
             )
         FROM Operation o
+        WHERE (:cursor IS NULL OR o.id < :cursor)
+        ORDER BY o.id DESC
+        LIMIT :limit
     """)
-    List<OperationShortResponse> findAllOperationShortResponse();
+    List<OperationShortResponse> findAllOperationShortResponseByCursorPageable(Integer limit, Long cursor);
 
 }

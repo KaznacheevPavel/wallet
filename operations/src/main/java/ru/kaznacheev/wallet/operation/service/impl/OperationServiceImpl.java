@@ -3,9 +3,11 @@ package ru.kaznacheev.wallet.operation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kaznacheev.wallet.common.dto.CursorPage;
 import ru.kaznacheev.wallet.common.exception.ExceptionTitle;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
+import ru.kaznacheev.wallet.common.dto.CursorPageable;
 import ru.kaznacheev.wallet.operation.dto.response.OperationResponse;
 import ru.kaznacheev.wallet.operation.dto.response.OperationShortResponse;
 import ru.kaznacheev.wallet.operation.entity.Operation;
@@ -47,8 +49,17 @@ public class OperationServiceImpl implements OperationService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OperationShortResponse> getAllOperations() {
-        return operationRepository.findAllOperationShortResponse();
+    public CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(CursorPageable cursorPageable) {
+        List<OperationShortResponse> operations =
+                operationRepository.findAllOperationShortResponseByCursorPageable(cursorPageable.getLimit() + 1,
+                        cursorPageable.getCursor());
+        Long nextCursor = null;
+        boolean isLastPage = operations.size() <= cursorPageable.getLimit();
+        if (!isLastPage && !operations.isEmpty()) {
+            operations = operations.subList(0, cursorPageable.getLimit());
+            nextCursor = operations.getLast().getId();
+        }
+        return new CursorPage<>(operations, nextCursor);
     }
 
 }
