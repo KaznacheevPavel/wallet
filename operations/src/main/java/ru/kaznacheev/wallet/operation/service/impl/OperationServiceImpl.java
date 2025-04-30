@@ -1,11 +1,13 @@
 package ru.kaznacheev.wallet.operation.service.impl;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.kaznacheev.wallet.common.dto.CursorPage;
 import ru.kaznacheev.wallet.common.dto.CursorPageable;
-import ru.kaznacheev.wallet.common.exception.ExceptionTitle;
+import ru.kaznacheev.wallet.common.exception.ExceptionDetail;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
 import ru.kaznacheev.wallet.operation.dto.response.OperationResponse;
@@ -25,6 +27,7 @@ import java.util.Optional;
  * Реализация интерфейса {@link OperationService}.
  */
 @Service
+@Validated
 @RequiredArgsConstructor
 public class OperationServiceImpl implements OperationService {
 
@@ -33,7 +36,7 @@ public class OperationServiceImpl implements OperationService {
     private final Clock clock;
 
     @Override
-    public OperationResponse createOperation(CreateOperationRequest request) {
+    public OperationResponse createOperation(@Valid CreateOperationRequest request) {
         Operation operation = Operation.builder()
                 .type(OperationType.valueOf(request.getType()))
                 .amount(request.getAmount())
@@ -48,12 +51,13 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public OperationResponse getOperationById(Long id) {
         Optional<OperationResponse> operation = operationRepository.findOperationResponseById(id);
-        return operation.orElseThrow(() -> new NotFoundException(ExceptionTitle.OPERATION_NOT_FOUND_BY_ID.format(id)));
+        return operation.orElseThrow(() -> new NotFoundException(ExceptionDetail.OPERATION_NOT_FOUND_BY_ID.format(id)));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(CursorPageable cursorPageable) {
+    public CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(
+            @Valid CursorPageable cursorPageable) {
         List<OperationShortResponse> operations =
                 operationRepository.findAllOperationShortResponseByCursorPageable(cursorPageable.getLimit() + 1,
                         cursorPageable.getCursor());

@@ -1,5 +1,6 @@
 package ru.kaznacheev.wallet.operation.service;
 
+import jakarta.validation.Valid;
 import ru.kaznacheev.wallet.common.dto.CursorPage;
 import ru.kaznacheev.wallet.common.dto.CursorPageable;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
@@ -19,7 +20,7 @@ public interface OperationService {
      * @param request Информация о новой операции
      * @return {@link OperationResponse} с информацией о созданной операции
      */
-    OperationResponse createOperation(CreateOperationRequest request);
+    OperationResponse createOperation(@Valid CreateOperationRequest request);
 
     /**
      * Возвращает информацию об операции по идентификатору.
@@ -35,6 +36,6 @@ public interface OperationService {
      * @param cursorPageable Параметры курсорной пагинации
      * @return {@link CursorPage} {@link List} {@link OperationShortResponse} с краткой информацией об операции
      */
-    CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(CursorPageable cursorPageable);
+    CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(@Valid CursorPageable cursorPageable);
 
 }

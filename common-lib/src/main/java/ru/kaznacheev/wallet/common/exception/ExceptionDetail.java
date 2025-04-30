@@ -1,16 +1,15 @@
 package ru.kaznacheev.wallet.common.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * Перечисление возможных подробных описаний для исключений.
  */
 @AllArgsConstructor
-@Getter
-public enum ExceptionTitle {
+public enum ExceptionDetail {
 
-    OPERATION_NOT_FOUND_BY_ID("Операция с идентификатором %d не найдена");
+    OPERATION_NOT_FOUND_BY_ID("Операция с идентификатором %d не найдена"),
+    VALIDATION_ERROR("Ошибка валидации данных");
 
     private final String template;
 
