@@ -1,4 +1,4 @@
-package ru.kaznacheev.wallet.common.dto;
+package ru.kaznacheev.wallet.common.dto.request;
 
 import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.Max;

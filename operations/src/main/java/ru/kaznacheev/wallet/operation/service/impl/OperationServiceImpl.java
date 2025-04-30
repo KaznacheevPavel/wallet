@@ -1,12 +1,10 @@
 package ru.kaznacheev.wallet.operation.service.impl;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import ru.kaznacheev.wallet.common.dto.CursorPage;
-import ru.kaznacheev.wallet.common.dto.CursorPageable;
+import ru.kaznacheev.wallet.common.dto.request.CursorPageable;
+import ru.kaznacheev.wallet.common.dto.response.CursorPage;
 import ru.kaznacheev.wallet.common.exception.ExceptionDetail;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
 import ru.kaznacheev.wallet.operation.dto.request.CreateOperationRequest;
@@ -27,7 +25,6 @@ import java.util.Optional;
  * Реализация интерфейса {@link OperationService}.
  */
 @Service
-@Validated
 @RequiredArgsConstructor
 public class OperationServiceImpl implements OperationService {
 
@@ -36,7 +33,7 @@ public class OperationServiceImpl implements OperationService {
     private final Clock clock;
 
     @Override
-    public OperationResponse createOperation(@Valid CreateOperationRequest request) {
+    public OperationResponse createOperation(CreateOperationRequest request) {
         Operation operation = Operation.builder()
                 .type(OperationType.valueOf(request.getType()))
                 .amount(request.getAmount())
@@ -56,8 +53,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Transactional(readOnly = true)
     @Override
-    public CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(
-            @Valid CursorPageable cursorPageable) {
+    public CursorPage<List<OperationShortResponse>> getAllOperationsByCursorPageable(CursorPageable cursorPageable) {
         List<OperationShortResponse> operations =
                 operationRepository.findAllOperationShortResponseByCursorPageable(cursorPageable.getLimit() + 1,
                         cursorPageable.getCursor());
