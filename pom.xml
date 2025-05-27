@@ -18,4 +18,8 @@
     <name>Wallet application</name>
     <description>Budget control application</description>
 
+    <modules>
+        <module>dependency-bom</module>
+    </modules>
+
 </project>
