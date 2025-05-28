@@ -20,6 +20,7 @@
 
     <modules>
         <module>dependency-bom</module>
+        <module>user-service</module>
     </modules>
 
 </project>
