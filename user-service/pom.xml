@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ru.kaznacheev</groupId>
+        <groupId>ru.kaznacheev.wallet</groupId>
         <artifactId>dependency-bom</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../dependency-bom/pom.xml</relativePath>

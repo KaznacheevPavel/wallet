@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>ru.kaznacheev</groupId>
+    <groupId>ru.kaznacheev.wallet</groupId>
     <artifactId>wallet</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
