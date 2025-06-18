@@ -1,7 +1,7 @@
 package ru.kaznacheev.wallet.userservice.service;
 
-import ru.kaznacheev.wallet.userservice.dto.CreateUserRequest;
-import ru.kaznacheev.wallet.userservice.dto.UserInfoResponse;
+import ru.kaznacheev.wallet.userservice.dto.request.CreateUserRequest;
+import ru.kaznacheev.wallet.userservice.dto.response.UserInfoResponse;
 
 import java.util.List;
 

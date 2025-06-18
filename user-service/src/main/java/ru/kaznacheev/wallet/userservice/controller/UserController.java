@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kaznacheev.wallet.userservice.dto.CreateUserRequest;
-import ru.kaznacheev.wallet.userservice.dto.UserInfoResponse;
+import ru.kaznacheev.wallet.userservice.dto.request.CreateUserRequest;
+import ru.kaznacheev.wallet.userservice.dto.response.UserInfoResponse;
 import ru.kaznacheev.wallet.userservice.service.UserService;
 
 import java.util.List;

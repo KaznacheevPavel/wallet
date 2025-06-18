@@ -1,4 +1,4 @@
-package ru.kaznacheev.wallet.userservice.dto;
+package ru.kaznacheev.wallet.userservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
