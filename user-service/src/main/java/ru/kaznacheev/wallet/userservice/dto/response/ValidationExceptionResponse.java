@@ -1,6 +1,6 @@
 package ru.kaznacheev.wallet.userservice.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -10,10 +10,11 @@ import java.util.List;
 @Getter
 public class ValidationExceptionResponse extends ExceptionResponse {
 
-    private final List<ValidationError> validationErrors;
+    private final List<ValidationIssue> validationIssues;
 
-    @AllArgsConstructor
-    private class ValidationError {
+    @Builder
+    @Getter
+    public static class ValidationIssue {
 
         private final String field;
 

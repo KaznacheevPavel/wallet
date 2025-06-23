@@ -1,0 +1,7 @@
+user:
+  username:
+    min-length: 5
+    max-length: 20
+  password:
+    min-length: 8
+    max-length: 255

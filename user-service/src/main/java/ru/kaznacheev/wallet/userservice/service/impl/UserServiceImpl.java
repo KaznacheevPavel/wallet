@@ -1,6 +1,6 @@
 package ru.kaznacheev.wallet.userservice.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse getUserById(Long id) {
         Optional<UserInfoResponse> userInfo = userRepository.findUserInfoById(id);
         return userInfo.orElseThrow(() ->
-                new NotFoundException(messageSource.getMessage("exception.not_found.user_by_id",
+                new NotFoundException(messageSource.getMessage("exception.not-found.user-by-id",
                         new Object[]{id}, Locale.getDefault())));
     }
 
