@@ -1,9 +1,9 @@
 package ru.kaznacheev.wallet.userservice.service;
 
 import ru.kaznacheev.wallet.userservice.dto.request.CreateUserRequest;
+import ru.kaznacheev.wallet.userservice.dto.request.CursorPageableUserInfoRequest;
+import ru.kaznacheev.wallet.userservice.dto.response.CursorPage;
 import ru.kaznacheev.wallet.userservice.dto.response.UserInfoResponse;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -11,6 +11,6 @@ public interface UserService {
 
     UserInfoResponse getUserById(Long id);
 
-    List<UserInfoResponse> getAllUsers();
+    CursorPage<UserInfoResponse, Long> getAllUsers(CursorPageableUserInfoRequest request);
 
 }

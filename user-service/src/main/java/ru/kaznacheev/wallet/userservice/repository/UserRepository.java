@@ -22,7 +22,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("""
         SELECT new ru.kaznacheev.wallet.userservice.dto.response.UserInfoResponse(u.id, u.username)
         FROM User u
+        WHERE (:cursor IS NULL OR u.id < :cursor)
+        ORDER BY u.id DESC
+        LIMIT :limit
     """)
-    List<UserInfoResponse> findAllUserInfo();
+    List<UserInfoResponse> findAllUserInfo(Long cursor, Integer limit);
 
 }

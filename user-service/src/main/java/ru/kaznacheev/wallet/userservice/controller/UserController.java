@@ -3,16 +3,17 @@ package ru.kaznacheev.wallet.userservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kaznacheev.wallet.userservice.dto.request.CreateUserRequest;
+import ru.kaznacheev.wallet.userservice.dto.request.CursorPageableUserInfoRequest;
+import ru.kaznacheev.wallet.userservice.dto.response.CursorPage;
 import ru.kaznacheev.wallet.userservice.dto.response.UserInfoResponse;
 import ru.kaznacheev.wallet.userservice.service.UserService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -32,8 +33,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserInfoResponse> getAllUser() {
-        return userService.getAllUsers();
+    public CursorPage<UserInfoResponse, Long> getAllUser(@Valid @ModelAttribute CursorPageableUserInfoRequest request) {
+        return userService.getAllUsers(request);
     }
 
 }

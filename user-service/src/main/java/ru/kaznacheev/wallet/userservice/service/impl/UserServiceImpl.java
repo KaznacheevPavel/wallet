@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kaznacheev.wallet.userservice.dto.request.CreateUserRequest;
+import ru.kaznacheev.wallet.userservice.dto.request.CursorPageableUserInfoRequest;
+import ru.kaznacheev.wallet.userservice.dto.response.CursorPage;
 import ru.kaznacheev.wallet.userservice.dto.response.UserInfoResponse;
 import ru.kaznacheev.wallet.userservice.entity.User;
 import ru.kaznacheev.wallet.userservice.exception.NotFoundException;
@@ -25,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final MessageSource messageSource;
 
+    @Transactional
     @Override
     public UserInfoResponse createUser(CreateUserRequest request) {
         User user = User.builder()
@@ -36,6 +40,7 @@ public class UserServiceImpl implements UserService {
         return new UserInfoResponse(user.getId(), user.getUsername());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserInfoResponse getUserById(Long id) {
         Optional<UserInfoResponse> userInfo = userRepository.findUserInfoById(id);
@@ -44,9 +49,17 @@ public class UserServiceImpl implements UserService {
                         new Object[]{id}, Locale.getDefault())));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<UserInfoResponse> getAllUsers() {
-        return userRepository.findAllUserInfo();
+    public CursorPage<UserInfoResponse, Long> getAllUsers(CursorPageableUserInfoRequest request) {
+        List<UserInfoResponse> users = userRepository.findAllUserInfo(request.getCursor(), request.getLimit() + 1);
+        Long nextCursor = null;
+        boolean isLastPage = users.size() <= request.getLimit();
+        if (!isLastPage && !users.isEmpty()) {
+            users = users.subList(0, request.getLimit());
+            nextCursor = users.getLast().getId();
+        }
+        return new CursorPage<>(users, nextCursor);
     }
 
 }

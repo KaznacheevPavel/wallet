@@ -10,7 +10,7 @@ import ru.kaznacheev.wallet.userservice.validation.constraint.ConfigurableSize;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class ConfigurableSizeValidator implements ConstraintValidator<ConfigurableSize, String> {
+public class ConfigurableSizeStringValidator implements ConstraintValidator<ConfigurableSize, String> {
 
     private final PropertyResolver propertyResolver;
     private int min = 0;

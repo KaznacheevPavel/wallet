@@ -1,3 +1,7 @@
+pagination:
+  limit:
+    max: 25
+
 user:
   username:
     min-length: 5
