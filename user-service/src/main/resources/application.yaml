@@ -1,5 +1,0 @@
-spring:
-  application:
-    name: User service
-server:
-  port: 8081

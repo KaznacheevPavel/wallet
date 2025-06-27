@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: Auth service
+server:
+  port: 8082
+
+security:
+  password:
+    encoder-strength: 14

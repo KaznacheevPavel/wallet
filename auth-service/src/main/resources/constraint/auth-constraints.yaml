@@ -1,0 +1,7 @@
+credential:
+  email:
+    max-size: 255
+    pattern: ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$
+  password:
+    min-size: 8
+    max-size: 255
