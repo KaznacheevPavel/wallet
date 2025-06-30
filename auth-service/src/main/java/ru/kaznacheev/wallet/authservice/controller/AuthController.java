@@ -2,11 +2,14 @@ package ru.kaznacheev.wallet.authservice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.kaznacheev.wallet.authservice.model.dto.request.LoginRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.request.RegistrationRequest;
+import ru.kaznacheev.wallet.authservice.model.dto.response.LoginResponse;
 import ru.kaznacheev.wallet.authservice.model.dto.response.RegistrationResponse;
 import ru.kaznacheev.wallet.authservice.service.AuthService;
 
@@ -20,6 +23,16 @@ public class AuthController {
     @PostMapping("/register")
     public RegistrationResponse register(@Valid @RequestBody RegistrationRequest request) {
         return authService.register(request);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
+    }
+
+    @GetMapping("/admin")
+    public void test() {
+
     }
 
 }
