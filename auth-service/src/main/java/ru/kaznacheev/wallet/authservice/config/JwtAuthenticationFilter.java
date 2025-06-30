@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = authHeader.replace(TOKEN_PREFIX, "");
-        DecodedJWT decodedJWT = jwtService.decode(token);
+        DecodedJWT decodedJWT = jwtService.verify(token);
         Authentication authentication = new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null,
                 Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);

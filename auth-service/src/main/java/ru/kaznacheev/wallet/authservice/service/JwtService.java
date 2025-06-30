@@ -1,15 +1,16 @@
 package ru.kaznacheev.wallet.authservice.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import java.util.UUID;
+import ru.kaznacheev.wallet.authservice.model.dto.response.LoginResponse;
 
 public interface JwtService {
 
-    String generateAccessToken(UUID id);
+    String generateAccessToken(String userId);
 
-    String generateRefreshToken(UUID id);
+    String generateRefreshToken(String userId);
 
-    DecodedJWT decode(String token);
+    LoginResponse refresh(String refreshToken);
+
+    DecodedJWT verify(String token);
 
 }

@@ -61,7 +61,8 @@ public class AuthServiceImpl implements AuthService {
         }
         Arrays.fill(request.getPassword(), '\0');
         UUID id = credential.get().getId();
-        return new LoginResponse(jwtService.generateAccessToken(id), jwtService.generateRefreshToken(id));
+        return new LoginResponse(jwtService.generateAccessToken(id.toString()),
+                jwtService.generateRefreshToken(id.toString()));
     }
 
 }

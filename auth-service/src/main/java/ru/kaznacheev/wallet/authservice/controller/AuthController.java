@@ -2,16 +2,17 @@ package ru.kaznacheev.wallet.authservice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kaznacheev.wallet.authservice.model.dto.request.LoginRequest;
+import ru.kaznacheev.wallet.authservice.model.dto.request.RefreshRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.request.RegistrationRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.response.LoginResponse;
 import ru.kaznacheev.wallet.authservice.model.dto.response.RegistrationResponse;
 import ru.kaznacheev.wallet.authservice.service.AuthService;
+import ru.kaznacheev.wallet.authservice.service.JwtService;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -19,6 +20,7 @@ import ru.kaznacheev.wallet.authservice.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
 
     @PostMapping("/register")
     public RegistrationResponse register(@Valid @RequestBody RegistrationRequest request) {
@@ -30,9 +32,9 @@ public class AuthController {
         return authService.login(request);
     }
 
-    @GetMapping("/admin")
-    public void test() {
-
+    @PostMapping("/refresh")
+    public LoginResponse refresh(@Valid @RequestBody RefreshRequest request) {
+        return jwtService.refresh(request.getRefreshToken());
     }
 
 }
