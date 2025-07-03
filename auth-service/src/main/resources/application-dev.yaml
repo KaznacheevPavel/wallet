@@ -23,3 +23,7 @@ jwt:
     access: 600 # 10 минут
     refresh: 1209600 # 14 дней
   secret: dmVyeVZlcnlTZWNyZXRLZXlGb3JKV1RBdXRoZW50aWNhdGlvbkluV2FsbGV0QXBwbGljYXRpb24=
+  redis:
+    keys:
+      refresh: refresh:{userId}:{jti}
+      blacklist: blacklist:{jti}

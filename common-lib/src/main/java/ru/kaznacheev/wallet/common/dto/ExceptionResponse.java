@@ -1,4 +1,4 @@
-package ru.kaznacheev.wallet.common.dto.response;
+package ru.kaznacheev.wallet.common.dto;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

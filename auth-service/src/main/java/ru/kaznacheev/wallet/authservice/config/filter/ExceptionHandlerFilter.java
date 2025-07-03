@@ -1,4 +1,4 @@
-package ru.kaznacheev.wallet.authservice.config;
+package ru.kaznacheev.wallet.authservice.config.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

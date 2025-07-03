@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class RefreshRequest {
+public class RefreshTokenRequest {
 
     @NotBlank(message = "{validation.refresh-token.not-blank}")
     private final String refreshToken;

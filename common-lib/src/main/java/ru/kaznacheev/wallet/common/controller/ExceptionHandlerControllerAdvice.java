@@ -11,8 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.kaznacheev.wallet.common.dto.response.ExceptionResponse;
-import ru.kaznacheev.wallet.common.dto.response.ValidationExceptionResponse;
+import ru.kaznacheev.wallet.common.dto.ExceptionResponse;
+import ru.kaznacheev.wallet.common.dto.ValidationExceptionResponse;
 import ru.kaznacheev.wallet.common.exception.BasicException;
 
 import java.util.ArrayList;
