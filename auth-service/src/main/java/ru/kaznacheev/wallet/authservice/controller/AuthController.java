@@ -35,4 +35,9 @@ public class AuthController {
         return authService.refresh(request);
     }
 
+    @PostMapping("/verify")
+    public void verify() {
+
+    }
+
 }
