@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+
+  auth-service:
+    image: auth-service
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: auth-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth_db:5432/auth_db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+
+      - SPRING_DATA_REDIS_HOST=wallet_redis
+    ports:
+      - "8082:8082"
+    networks:
+      - dev-backend-net
+      - dev-db-net
+      - dev-redis-net
+    depends_on:
+      - auth-service-db
+      - redis
+
+  gateway:
+    image: gateway
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: gateway
+    environment:
+      - URI.AUTH-SERVICE=http://auth-service:8082
+    ports:
+      - "8081:8081"
+    networks:
+      - dev-backend-net
+
+  auth-service-db:
+    image: postgres:17.4-alpine3.21
+    container_name: auth_db
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    networks:
+      - dev-db-net
+
+  redis:
+    image: redis:8.0-alpine
+    container_name: wallet_redis
+    environment:
+      REDIS_PASSWORD: admin
+    ports:
+      - "6379:6379"
+    networks:
+      - dev-redis-net
+
+networks:
+  dev-backend-net:
+  dev-db-net:
+  dev-redis-net:
