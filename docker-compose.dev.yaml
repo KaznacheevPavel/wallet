@@ -26,6 +26,26 @@ services:
       - auth-service-db
       - redis
 
+  operation-service:
+    image: operation-service
+    build:
+      context: .
+      dockerfile: operation-service/Dockerfile
+    container_name: operation-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://operation_db:5432/operation_db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+    ports:
+      - "8083:8083"
+    networks:
+      - dev-backend-net
+      - dev-db-net
+    depends_on:
+      - operation-service-db
+
   gateway:
     image: gateway
     build:
