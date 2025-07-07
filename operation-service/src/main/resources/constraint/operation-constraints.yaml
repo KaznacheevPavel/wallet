@@ -1,0 +1,4 @@
+operation:
+  amount:
+    max-integer-length: 12
+    max-fraction-length: 2

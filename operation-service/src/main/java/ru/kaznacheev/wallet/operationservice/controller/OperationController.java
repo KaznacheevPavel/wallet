@@ -1,5 +1,6 @@
 package ru.kaznacheev.wallet.operationservice.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class OperationController {
 
     @PostMapping
     public OperationResponse createOperation(@RequestHeader("Wallet-User-Id") UUID userId,
-                                             @RequestBody NewOperationRequest request) {
+                                             @Valid @RequestBody NewOperationRequest request) {
         return operationService.createOperation(userId, request);
     }
 
