@@ -23,6 +23,7 @@
         <module>auth-service</module>
         <module>common-lib</module>
         <module>gateway</module>
+        <module>operation-service</module>
     </modules>
 
 </project>
