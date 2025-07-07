@@ -45,6 +45,7 @@ public class PreAuthGatewayFilterFactory extends AbstractGatewayFilterFactory<Pr
                                         ServerHttpRequest request = exchange.getRequest().mutate()
                                                 .headers(httpHeaders -> {
                                                     httpHeaders.remove(HttpHeaders.AUTHORIZATION);
+                                                    httpHeaders.remove(userIdHeader);
                                                     httpHeaders.add(userIdHeader, verifyResponse.getUserId());
                                                 })
                                                 .build();

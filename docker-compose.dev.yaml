@@ -54,6 +54,7 @@ services:
     container_name: gateway
     environment:
       - URI.AUTH-SERVICE=http://auth-service:8082
+      - URI.OPERATION-SERVICE=http://operation-service:8083
     ports:
       - "8081:8081"
     networks:
