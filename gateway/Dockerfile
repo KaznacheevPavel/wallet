@@ -8,6 +8,7 @@ COPY /auth-service/pom.xml ./auth-service/
 COPY /common-lib/pom.xml ./common-lib/
 COPY /dependency-bom/pom.xml ./dependency-bom/
 COPY /gateway/pom.xml ./gateway/
+COPY /operation-service/pom.xml ./operation-service/
 
 RUN mvn dependency:go-offline -B -pl gateway -am
 

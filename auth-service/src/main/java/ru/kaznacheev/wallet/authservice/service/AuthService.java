@@ -5,6 +5,7 @@ import ru.kaznacheev.wallet.authservice.model.dto.request.RefreshTokenRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.request.RegistrationRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.response.TokenPairResponse;
 import ru.kaznacheev.wallet.authservice.model.dto.response.RegistrationResponse;
+import ru.kaznacheev.wallet.authservice.model.dto.response.VerifyResponse;
 
 public interface AuthService {
 
@@ -13,5 +14,7 @@ public interface AuthService {
     TokenPairResponse login(LoginRequest request);
 
     TokenPairResponse refresh(RefreshTokenRequest request);
+
+    VerifyResponse verify(String userId);
 
 }

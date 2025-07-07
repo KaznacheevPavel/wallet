@@ -5,6 +5,9 @@ uri:
   auth-service: http://localhost:8082
   verify-token: ${uri.auth-service}/api/v1/auth/verify
 
+headers:
+  user-id: Wallet-User-Id
+
 spring:
   application:
     name: Gateway

@@ -5,15 +5,19 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import ru.kaznacheev.wallet.gateway.dto.VerifyResponse;
 
 @Component
 public class PreAuthGatewayFilterFactory extends AbstractGatewayFilterFactory<PreAuthGatewayFilterFactory.Config> {
 
     private final String TOKEN_PREFIX = "Bearer ";
 
+    @Value("${headers.user-id}")
+    private String userIdHeader;
     @Value("${uri.verify-token}")
     private String verifyUri;
     private final WebClient webClient = WebClient.create();
@@ -36,7 +40,16 @@ public class PreAuthGatewayFilterFactory extends AbstractGatewayFilterFactory<Pr
                     .header(HttpHeaders.AUTHORIZATION, authHeader)
                     .exchangeToMono(clientResponse -> {
                         if (clientResponse.statusCode().is2xxSuccessful()) {
-                            return chain.filter(exchange);
+                            return clientResponse.bodyToMono(VerifyResponse.class)
+                                    .flatMap(verifyResponse -> {
+                                        ServerHttpRequest request = exchange.getRequest().mutate()
+                                                .headers(httpHeaders -> {
+                                                    httpHeaders.remove(HttpHeaders.AUTHORIZATION);
+                                                    httpHeaders.add(userIdHeader, verifyResponse.getUserId());
+                                                })
+                                                .build();
+                                        return chain.filter(exchange.mutate().request(request).build());
+                                    });
                         } else {
                             exchange.getResponse().setStatusCode(clientResponse.statusCode());
                             exchange.getResponse().getHeaders().putAll(clientResponse.headers().asHttpHeaders());

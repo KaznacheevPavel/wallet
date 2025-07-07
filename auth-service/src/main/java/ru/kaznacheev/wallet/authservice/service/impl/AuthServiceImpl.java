@@ -11,6 +11,7 @@ import ru.kaznacheev.wallet.authservice.model.dto.request.RefreshTokenRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.request.RegistrationRequest;
 import ru.kaznacheev.wallet.authservice.model.dto.response.RegistrationResponse;
 import ru.kaznacheev.wallet.authservice.model.dto.response.TokenPairResponse;
+import ru.kaznacheev.wallet.authservice.model.dto.response.VerifyResponse;
 import ru.kaznacheev.wallet.authservice.model.entity.Credential;
 import ru.kaznacheev.wallet.authservice.repository.CredentialRepository;
 import ru.kaznacheev.wallet.authservice.service.AuthService;
@@ -81,6 +82,11 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(userid);
         refreshWhitelistService.saveToken(accessToken, refreshToken);
         return new TokenPairResponse(accessToken, refreshToken);
+    }
+
+    @Override
+    public VerifyResponse verify(String userId) {
+        return new VerifyResponse(userId);
     }
 
 }
