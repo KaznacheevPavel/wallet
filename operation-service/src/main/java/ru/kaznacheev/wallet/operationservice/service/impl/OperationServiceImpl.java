@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kaznacheev.wallet.common.exception.AccessDeniedException;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
+import ru.kaznacheev.wallet.operationservice.mapper.OperationMapper;
 import ru.kaznacheev.wallet.operationservice.model.dto.request.NewOperationRequest;
 import ru.kaznacheev.wallet.operationservice.model.dto.response.OperationResponse;
 import ru.kaznacheev.wallet.operationservice.model.entity.Operation;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class OperationServiceImpl implements OperationService {
 
     private final OperationRepository operationRepository;
+    private final OperationMapper operationMapper;
 
     @Transactional
     @Override
@@ -29,7 +31,7 @@ public class OperationServiceImpl implements OperationService {
                 .amount(request.getAmount())
                 .build();
         operationRepository.save(operation);
-        return new OperationResponse(operation.getId(), operation.getType(), operation.getAmount());
+        return operationMapper.toOperationResponse(operation);
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +44,7 @@ public class OperationServiceImpl implements OperationService {
         if (!operation.get().getUserId().equals(userId)) {
             throw new AccessDeniedException("Нет доступа");
         }
-        return new OperationResponse(operation.get().getId(), operation.get().getType(), operation.get().getAmount());
+        return operationMapper.toOperationResponse(operation.get());
     }
 
     @Transactional
