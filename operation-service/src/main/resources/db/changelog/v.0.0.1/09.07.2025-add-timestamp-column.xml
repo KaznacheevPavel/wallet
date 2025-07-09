@@ -4,11 +4,11 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="add-tag-0.0.1" author="Kaznacheev Pavel">
-        <tagDatabase tag="v.0.0.1"/>
+    <changeSet id="09.07.2025-add-timestamp-column" author="Kaznacheev Pavel">
+        <sqlFile path="sql/add-timestamp-column.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/rollback/drop-timestamp-column.sql" relativeToChangelogFile="true"/>
+        </rollback>
     </changeSet>
-
-    <include file="07.07.2025-create-operations-table.xml" relativeToChangelogFile="true" author="Kaznacheev Pavel"/>
-    <include file="09.07.2025-add-timestamp-column.xml" relativeToChangelogFile="true" author="Kaznacheev Pavel"/>
 
 </databaseChangeLog>

@@ -17,6 +17,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -41,5 +42,8 @@ public class Operation {
     private OperationType type;
 
     private BigDecimal amount;
+
+    @Column(name = "operation_timestamp")
+    private Instant timestamp;
 
 }

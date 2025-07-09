@@ -5,6 +5,7 @@ import lombok.Getter;
 import ru.kaznacheev.wallet.operationservice.model.entity.OperationType;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -16,5 +17,7 @@ public class OperationResponse {
     private final OperationType type;
 
     private final BigDecimal amount;
+
+    private final Instant timestamp;
 
 }

@@ -16,6 +16,8 @@ import ru.kaznacheev.wallet.operationservice.repository.OperationRepository;
 import ru.kaznacheev.wallet.operationservice.service.OperationService;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +30,7 @@ public class OperationServiceImpl implements OperationService {
     private final OperationMapper operationMapper;
     @Qualifier("operationMessageSource")
     private final MessageSource messageSource;
+    private final Clock clock;
 
     @Transactional
     @Override
@@ -36,6 +39,7 @@ public class OperationServiceImpl implements OperationService {
                 .userId(userId)
                 .type(OperationType.valueOf(request.getType()))
                 .amount(new BigDecimal(request.getAmount()))
+                .timestamp(request.getTimestamp() != null ? request.getTimestamp() : Instant.now(clock))
                 .build();
         operationRepository.save(operation);
         return operationMapper.toOperationResponse(operation);
