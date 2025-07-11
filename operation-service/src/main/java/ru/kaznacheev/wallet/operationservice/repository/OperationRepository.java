@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface OperationRepository extends JpaRepository<Operation, UUID> {
+public interface OperationRepository extends JpaRepository<Operation, UUID>, OperationSpecificationRepository {
 
     @Query("""
         SELECT o.userId
