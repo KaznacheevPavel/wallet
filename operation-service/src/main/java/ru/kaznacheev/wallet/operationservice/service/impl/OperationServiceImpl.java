@@ -7,25 +7,23 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kaznacheev.wallet.common.exception.AccessDeniedException;
 import ru.kaznacheev.wallet.common.exception.BadRequestException;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
-import ru.kaznacheev.wallet.operationservice.config.TimeZoneContextHolder;
 import ru.kaznacheev.wallet.operationservice.mapper.OperationMapper;
+import ru.kaznacheev.wallet.operationservice.model.dto.criteria.OperationSearchCriteria;
 import ru.kaznacheev.wallet.operationservice.model.dto.request.NewOperationRequest;
 import ru.kaznacheev.wallet.operationservice.model.dto.request.SearchOperationRequest;
 import ru.kaznacheev.wallet.operationservice.model.dto.response.OperationResponse;
 import ru.kaznacheev.wallet.operationservice.model.entity.Operation;
 import ru.kaznacheev.wallet.operationservice.model.entity.OperationType;
 import ru.kaznacheev.wallet.operationservice.repository.OperationRepository;
-import ru.kaznacheev.wallet.operationservice.repository.specification.OperationSpecification;
-import ru.kaznacheev.wallet.operationservice.repository.specification.OperationSpecificationCriteria;
 import ru.kaznacheev.wallet.operationservice.service.MessageSourceService;
 import ru.kaznacheev.wallet.operationservice.service.OperationService;
+import ru.kaznacheev.wallet.operationservice.util.OperationSpecificationUtil;
 
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,30 +65,16 @@ public class OperationServiceImpl implements OperationService {
     @Transactional(readOnly = true)
     @Override
     public List<OperationResponse> getOperations(UUID userId, SearchOperationRequest request) {
-        OperationType type = request.getType() == null ? null : OperationType.valueOf(request.getType());
-        Instant fromDate = getInstant(request.getFromDate(), TimeZoneContextHolder.getTimeZone());
-        Instant toDate = getInstant(request.getToDate(), TimeZoneContextHolder.getTimeZone());
-
-        if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
+        if (Objects.nonNull(request.getFromDate()) && Objects.nonNull(request.getToDate())
+                && request.getFromDate().isAfter(request.getToDate())) {
             throw new BadRequestException(messageSourceService.getMessage("exception.specification.date-from-after-to"));
         }
-
-        BigDecimal greaterAmount = request.getGreaterAmount() == null ? null : new BigDecimal(request.getGreaterAmount());
-        BigDecimal lessAmount = request.getLessAmount() == null ? null : new BigDecimal(request.getLessAmount());
-
-        if (greaterAmount != null && lessAmount != null && greaterAmount.compareTo(lessAmount) > 0) {
+        if (Objects.nonNull(request.getGreaterAmount()) && Objects.nonNull(request.getLessAmount())
+                && new BigDecimal(request.getGreaterAmount()).compareTo(new BigDecimal(request.getLessAmount())) > 0) {
             throw new BadRequestException(messageSourceService.getMessage("exception.specification.amount-from-greater-to"));
         }
-
-        OperationSpecificationCriteria criteria = OperationSpecificationCriteria.builder()
-                .userId(userId)
-                .type(type)
-                .fromDate(fromDate)
-                .toDate(toDate)
-                .greaterAmount(greaterAmount)
-                .lessAmount(lessAmount)
-                .build();
-        Specification<Operation> specification = OperationSpecification.build(criteria);
+        OperationSearchCriteria searchCriteria = operationMapper.toOperationSearchCriteria(userId, request);
+        Specification<Operation> specification = OperationSpecificationUtil.buildOperationSearchSpecification(searchCriteria);
         return operationRepository.findAllBySpecification(specification);
     }
 
@@ -105,13 +89,6 @@ public class OperationServiceImpl implements OperationService {
             throw new AccessDeniedException(messageSourceService.getMessage("exception.access-denied"));
         }
         operationRepository.deleteById(operationId);
-    }
-
-    private Instant getInstant(LocalDate date, ZoneId zoneId) {
-        if (date == null) {
-            return null;
-        }
-        return date.atStartOfDay(zoneId).toInstant();
     }
 
 }

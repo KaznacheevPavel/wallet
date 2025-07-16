@@ -1,4 +1,4 @@
-package ru.kaznacheev.wallet.operationservice.repository.specification;
+package ru.kaznacheev.wallet.operationservice.model.dto.criteria;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class OperationSpecificationCriteria {
+public class OperationSearchCriteria {
 
     private final UUID userId;
 
