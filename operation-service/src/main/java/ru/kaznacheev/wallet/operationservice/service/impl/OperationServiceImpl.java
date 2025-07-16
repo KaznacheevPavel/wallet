@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kaznacheev.wallet.common.exception.AccessDeniedException;
 import ru.kaznacheev.wallet.common.exception.BadRequestException;
 import ru.kaznacheev.wallet.common.exception.NotFoundException;
+import ru.kaznacheev.wallet.operationservice.config.TimeZoneContextHolder;
 import ru.kaznacheev.wallet.operationservice.mapper.OperationMapper;
 import ru.kaznacheev.wallet.operationservice.model.dto.request.NewOperationRequest;
 import ru.kaznacheev.wallet.operationservice.model.dto.request.SearchOperationRequest;
@@ -65,10 +66,10 @@ public class OperationServiceImpl implements OperationService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OperationResponse> getOperations(UUID userId, String timezone, SearchOperationRequest request) {
+    public List<OperationResponse> getOperations(UUID userId, SearchOperationRequest request) {
         OperationType type = request.getType() == null ? null : OperationType.valueOf(request.getType());
-        Instant fromDate = getInstant(request.getFromDate(), timezone);
-        Instant toDate = getInstant(request.getToDate(), timezone);
+        Instant fromDate = getInstant(request.getFromDate(), TimeZoneContextHolder.getTimeZone());
+        Instant toDate = getInstant(request.getToDate(), TimeZoneContextHolder.getTimeZone());
 
         if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
             throw new BadRequestException(messageSourceService.getMessage("exception.specification.date-from-after-to"));
@@ -106,14 +107,11 @@ public class OperationServiceImpl implements OperationService {
         operationRepository.deleteById(operationId);
     }
 
-    private Instant getInstant(LocalDate date, String timezone) {
+    private Instant getInstant(LocalDate date, ZoneId zoneId) {
         if (date == null) {
             return null;
         }
-        if (!ZoneId.getAvailableZoneIds().contains(timezone)) {
-            throw new BadRequestException(messageSourceService.getMessage("exception.invalid-timezone"));
-        }
-        return date.atStartOfDay(ZoneId.of(timezone)).toInstant();
+        return date.atStartOfDay(zoneId).toInstant();
     }
 
 }

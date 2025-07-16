@@ -13,7 +13,7 @@ public interface OperationService {
 
     OperationResponse getOperationById(UUID userId, UUID operationId);
 
-    List<OperationResponse> getOperations(UUID userId, String timezone, SearchOperationRequest request);
+    List<OperationResponse> getOperations(UUID userId, SearchOperationRequest request);
 
     void deleteOperationById(UUID userId, UUID operationId);
 

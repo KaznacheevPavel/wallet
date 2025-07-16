@@ -40,9 +40,8 @@ public class OperationController {
 
     @GetMapping
     public List<OperationResponse> getOperations(@RequestHeader("Wallet-User-Id") UUID userId,
-                                                 @RequestHeader("Wallet-User-Timezone") String timezone,
                                                  @Valid @ModelAttribute SearchOperationRequest request) {
-        return operationService.getOperations(userId, timezone, request);
+        return operationService.getOperations(userId, request);
     }
 
     @DeleteMapping("/{operationId}")
