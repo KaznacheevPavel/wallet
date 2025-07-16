@@ -1,8 +1,6 @@
 package ru.kaznacheev.wallet.operationservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +14,10 @@ import ru.kaznacheev.wallet.operationservice.model.dto.response.OperationRespons
 import ru.kaznacheev.wallet.operationservice.model.entity.Operation;
 import ru.kaznacheev.wallet.operationservice.model.entity.OperationType;
 import ru.kaznacheev.wallet.operationservice.repository.OperationRepository;
-import ru.kaznacheev.wallet.operationservice.repository.specification.OperationSpecificationCriteria;
-import ru.kaznacheev.wallet.operationservice.service.OperationService;
 import ru.kaznacheev.wallet.operationservice.repository.specification.OperationSpecification;
+import ru.kaznacheev.wallet.operationservice.repository.specification.OperationSpecificationCriteria;
+import ru.kaznacheev.wallet.operationservice.service.MessageSourceService;
+import ru.kaznacheev.wallet.operationservice.service.OperationService;
 
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -26,7 +25,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,8 +34,7 @@ public class OperationServiceImpl implements OperationService {
 
     private final OperationRepository operationRepository;
     private final OperationMapper operationMapper;
-    @Qualifier("operationMessageSource")
-    private final MessageSource messageSource;
+    private final MessageSourceService messageSourceService;
     private final Clock clock;
 
     @Transactional
@@ -58,12 +55,10 @@ public class OperationServiceImpl implements OperationService {
     public OperationResponse getOperationById(UUID userId, UUID operationId) {
         Optional<Operation> operation = operationRepository.findById(operationId);
         if (operation.isEmpty()) {
-            throw new NotFoundException(messageSource.getMessage("exception.operation.not-found",
-                    new Object[]{}, Locale.getDefault()));
+            throw new NotFoundException(messageSourceService.getMessage("exception.operation.not-found"));
         }
         if (!operation.get().getUserId().equals(userId)) {
-            throw new AccessDeniedException(messageSource.getMessage("exception.access-denied",
-                    new Object[]{}, Locale.getDefault()));
+            throw new AccessDeniedException(messageSourceService.getMessage("exception.access-denied"));
         }
         return operationMapper.toOperationResponse(operation.get());
     }
@@ -76,16 +71,14 @@ public class OperationServiceImpl implements OperationService {
         Instant toDate = getInstant(request.getToDate(), timezone);
 
         if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
-            throw new BadRequestException(messageSource.getMessage("exception.specification.date-from-after-to",
-                    new Object[]{}, Locale.getDefault()));
+            throw new BadRequestException(messageSourceService.getMessage("exception.specification.date-from-after-to"));
         }
 
         BigDecimal greaterAmount = request.getGreaterAmount() == null ? null : new BigDecimal(request.getGreaterAmount());
         BigDecimal lessAmount = request.getLessAmount() == null ? null : new BigDecimal(request.getLessAmount());
 
         if (greaterAmount != null && lessAmount != null && greaterAmount.compareTo(lessAmount) > 0) {
-            throw new BadRequestException(messageSource.getMessage("exception.specification.amount-from-greater-to",
-                    new Object[]{}, Locale.getDefault()));
+            throw new BadRequestException(messageSourceService.getMessage("exception.specification.amount-from-greater-to"));
         }
 
         OperationSpecificationCriteria criteria = OperationSpecificationCriteria.builder()
@@ -105,24 +98,20 @@ public class OperationServiceImpl implements OperationService {
     public void deleteOperationById(UUID userId, UUID operationId) {
         Optional<UUID> operationOwner = operationRepository.findOperationOwnerById(operationId);
         if (operationOwner.isEmpty()) {
-            throw new NotFoundException(messageSource.getMessage("exception.operation.not-found",
-                    new Object[]{}, Locale.getDefault()));
+            throw new NotFoundException(messageSourceService.getMessage("exception.operation.not-found"));
         }
         if (!operationOwner.get().equals(userId)) {
-            throw new AccessDeniedException(messageSource.getMessage("exception.access-denied",
-                    new Object[]{}, Locale.getDefault()));
+            throw new AccessDeniedException(messageSourceService.getMessage("exception.access-denied"));
         }
         operationRepository.deleteById(operationId);
     }
 
     private Instant getInstant(LocalDate date, String timezone) {
-        System.out.println(timezone);
         if (date == null) {
             return null;
         }
         if (!ZoneId.getAvailableZoneIds().contains(timezone)) {
-            throw new BadRequestException(messageSource.getMessage("exception.invalid-timezone",
-                    new Object[]{}, Locale.getDefault()));
+            throw new BadRequestException(messageSourceService.getMessage("exception.invalid-timezone"));
         }
         return date.atStartOfDay(ZoneId.of(timezone)).toInstant();
     }
